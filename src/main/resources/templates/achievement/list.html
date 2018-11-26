@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>武将成就表</h1>
+<table border="1px">
+<tbody >
+  <tr  th:each="collect : ${wj}"> 
+     <td th:text="${collect._package}">@mdo</td>
+     <td th:text="${collect.nation}">@mdo</td>
+     <td th:text="${collect.wjname}">Mark</td>
+     <td th:text="${collect.achievename}">Mark</td>
+     <td th:text="${collect.achievement}">Mark</td>
+     <td th:text="${collect.level}">Otto</td>
+ </tr>
+</tbody>
+
+</table>
+</body>
+</html>
