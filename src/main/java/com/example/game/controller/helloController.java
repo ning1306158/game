@@ -1,6 +1,7 @@
 package com.example.game.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -25,9 +26,9 @@ public class helloController {
 	public Achievement index()
 	{
 //		Achievement a=achievementRepository.getOne("0072fa249ad6431f876465e8d65a8c28");
-		Achievement a=achievementRepository.getByWjnameId("tb_spdiaochan");
-		System.out.println(a);
-		return a;
+		List<Achievement> a=achievementRepository.getByWjId("tb_spdiaochan");
+		System.out.println(a.size());
+		return a.get(0);
 	}
 
 }
