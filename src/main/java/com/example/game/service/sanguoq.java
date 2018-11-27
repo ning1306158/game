@@ -16,7 +16,7 @@ import org.junit.Test;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.accessibility.internal.resources.accessibility;
+import com.example.game.domain.Achievement;
 
 public class sanguoq {
 	String uri = "http://www.sanguoq.com/achievement/";
@@ -28,7 +28,6 @@ public class sanguoq {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Achieve.start();
 		Elements a = document.select("div.wj");
 		for (Element element : a) {
 			handleSkill(element.attr("data-id"));
@@ -47,7 +46,7 @@ public class sanguoq {
 		CloseableHttpClient httpClient = null;
 		CloseableHttpResponse httpResponse = null;
 		try {
-			Achieve a=new Achieve();
+			Achievement a=new Achievement();
 			httpClient = HttpClients.createDefault();
 			HttpGet httpPost = new HttpGet(skillUri);
 			System.out.println(skillUri);
@@ -55,7 +54,7 @@ public class sanguoq {
 			String response = EntityUtils.toString(httpResponse.getEntity());
 			JSONObject jObject = JSON.parseObject(response);
 			System.out.println(jObject.get("identify"));
-			a.setName_id(jObject.get("identify").toString());
+			a.setWjId(jObject.get("identify").toString());
 			System.out.println(jObject.get("package"));
 			a.set_package(jObject.get("package").toString());
 			System.out.println(jObject.get("name"));
@@ -72,7 +71,6 @@ public class sanguoq {
 					System.out.println(((JSONObject) achieve).get("level_desc"));
 					a.setAchievement(((JSONObject) achieve).get("level_desc").toString());
 					a.setLevel(((JSONObject) achieve).get("level").toString());
-					a.save();
 				}
 			}
 		} catch (Exception e) {
