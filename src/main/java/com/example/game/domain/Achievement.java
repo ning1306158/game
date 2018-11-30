@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
-public class Achievement {
+public class Achievement implements Cloneable{
 	@Id
 	@GeneratedValue(generator = "system_uuid")
 	@GenericGenerator(name = "system_uuid", strategy = "uuid")
@@ -121,6 +121,10 @@ public class Achievement {
 
 	public void setWjId(String wjId) {
 		this.wjId = wjId;
+	}
+	@Override
+	public Achievement clone() throws CloneNotSupportedException {
+		return (Achievement) super.clone();
 	}
 
 }

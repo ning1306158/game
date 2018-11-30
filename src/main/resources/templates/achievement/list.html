@@ -4,17 +4,18 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script type="text/javascript" src="/source/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/source/js/jquery.form.js"></script>
 </head>
 <body>
 	<h1 align="center">武将成就表</h1>
 	<div align="center">
-		<form action="/achievement/findByWjnameLike" autocomplete="on">
-			<label>武将名</label><input type="text" name="wjname"
+		<form id='sub' action="/achievement" autocomplete="on">
+			<label id='wjn'>武将名</label><input type="text" name="wjname"
 				th:attr="value=${wjname}" />
 			<button type="submit">查找</button>
 		</form>
 	</div>
-	<div align="center">
+	<div id='nerong' align="center">
 		<table border="1px">
 			<tbody>
 				<tr th:each="collect : ${wj}">
@@ -28,15 +29,22 @@
 			</tbody>
 		</table>
 	</div>
+	<button name='lastPage' type="button">上一页</button>
+	<script>
+		$('[name=lastPage]').click(function() {
+			$('#sub').ajaxSubmit({
+				success : function(data) {
+					if (data != "") {
+						$("#nerong").html(data);
+					}
+				}
+			});
+		})
+	</script>
+
+
 	<div align="center">
-		<form action="/achievement/findByWjnameLike">
-			<input type="hidden" name="wjname" th:attr="value=${wjname}" /> <input
-				type="hidden" name="pageNum" th:attr="value=${pageNum}+1" />
-			<button name='lastPage' type="submit">上一页</button>
-			<button name='nextPage' type="submit" th:if="${hasNext}==true">下一页</button>
-		</form>
-		<script type="text/javascript">
-		</script>
+		<button name='nextPage' type="button" th:if="${hasNext}==true">下一页</button>
 	</div>
 </body>
 </html>

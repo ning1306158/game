@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface AchievementRepository extends JpaRepository<Achievement, String>{
 	List<Achievement> getByWjId(String wjId);
 	List<Achievement> findByWjnameLike(String wjname,Pageable pageable);
+	List<Achievement> findByAchievename(String achievename);
+	List<Achievement> findByAchievement(String achievement);
 }
