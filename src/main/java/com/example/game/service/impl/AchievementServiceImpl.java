@@ -49,7 +49,6 @@ public class AchievementServiceImpl implements AchievementService {
 	public List<Achievement> findByWjnameLike(String wjname, int pageNum, int pageSize) {
 
 		List<Order> orders = new ArrayList<>();
-		orders.add(new Order(Direction.DESC, "achievename"));
 		orders.add(new Order(Direction.DESC, "wjname"));
 		orders.add(new Order(Direction.DESC, "achievename"));
 		orders.add(new Order(Direction.ASC, "level"));

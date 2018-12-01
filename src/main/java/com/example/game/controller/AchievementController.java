@@ -41,11 +41,10 @@ public class AchievementController {
 		map.put("wj", list);
 		map.put("pageNum", pageNum);
 		map.put("wjname", wjname);
-		return "achievement/list";
+		return "index";
 	}
-	@ResponseBody
 	@RequestMapping("/findByWjnameLikeAj")
-	public List<Achievement> findByWjnameLikeAj(String wjname, Integer pageNum, Integer pageSize, ModelMap map) {
+	public String findByWjnameLikeAj(String wjname, Integer pageNum, Integer pageSize, ModelMap map) {
 		System.err.println(wjname + " " + pageNum + " " + pageSize);
 		if(wjname==null||wjname.matches(",+"))
 		{
@@ -65,7 +64,7 @@ public class AchievementController {
 		map.put("wj", list);
 		map.put("pageNum", pageNum);
 		map.put("wjname", wjname);
-		return list;
+		return "achievement/list";
 	}
 	@RequestMapping("/saveAllAchievement")
 	public String saveAllAchievement() {

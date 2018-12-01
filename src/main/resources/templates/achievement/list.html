@@ -1,50 +1,76 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script type="text/javascript" src="/source/js/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="/source/js/jquery.form.js"></script>
-</head>
-<body>
-	<h1 align="center">武将成就表</h1>
-	<div align="center">
-		<form id='sub' action="/achievement" autocomplete="on">
-			<label id='wjn'>武将名</label><input type="text" name="wjname"
-				th:attr="value=${wjname}" />
-			<button type="submit">查找</button>
-		</form>
-	</div>
-	<div id='nerong' align="center">
-		<table border="1px">
-			<tbody>
-				<tr th:each="collect : ${wj}">
-					<td th:text="${collect._package}">@mdo</td>
-					<td th:text="${collect.nation}">@mdo</td>
-					<td th:text="${collect.wjname}">Mark</td>
-					<td th:text="${collect.achievename}">Mark</td>
-					<td th:text="${collect.achievement}">Mark</td>
-					<td th:text="${collect.level}">Otto</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+
+<div align="center">
+	<form id='sub' action="/achievement/findByWjnameLikeAj"
+		autocomplete="on">
+		<label id='wjn'>武将名</label><input id='wjname' type="text"
+			name="wjname" th:attr="value=${wjname}" />
+		<button id='search' type="button">查找</button>
+	</form>
+</div>
+<table border="1px">
+	<tbody>
+		<tr th:each="collect : ${wj}">
+			<td th:text="${collect._package}">@mdo</td>
+			<td th:text="${collect.nation}">@mdo</td>
+			<td th:text="${collect.wjname}">Mark</td>
+			<td th:text="${collect.achievename}">Mark</td>
+			<td th:text="${collect.achievement}">Mark</td>
+			<td th:text="${collect.level}">Otto</td>
+		</tr>
+	</tbody>
+</table>
+
+<div align="center">
 	<button name='lastPage' type="button">上一页</button>
-	<script>
-		$('[name=lastPage]').click(function() {
-			$('#sub').ajaxSubmit({
-				success : function(data) {
-					if (data != "") {
-						$("#nerong").html(data);
-					}
+	<button name='nextPage' type="button" th:if="${hasNext}==true">下一页</button>
+</div>
+<script>
+	$('[name=lastPage]').click(function() {
+		$('#sub').ajaxSubmit({
+			data : {
+				pageNum : '[[${pageNum}-1]]'
+			},
+			success : function(data) {
+				if (data != "") {
+					$("#nerong").html(data);
 				}
-			});
+			}
+		});
+	})
+	$('[name=nextPage]').click(function() {
+		$('#sub').ajaxSubmit({
+			data : {
+				pageNum : '[[${pageNum}+1]]'
+			},
+			success : function(data) {
+				if (data != "") {
+					$("#nerong").html(data);
+				}
+			}
+		});
+	})
+	$('#search').click(function() {
+		$('#sub').ajaxSubmit({
+			success : function(data) {
+				if (data != "") {
+					$("#nerong").html(data);
+				}
+			}
+		});
+		return false;
+	})
+	$(function() {
+		$("#wjname").keydown(function(event) {
+			if (event.keyCode == 13) {
+				$('#sub').ajaxSubmit({
+					success : function(data) {
+						if (data != "") {
+							$("#nerong").html(data);
+						}
+					}
+				});
+				return false;
+			}
 		})
-	</script>
-
-
-	<div align="center">
-		<button name='nextPage' type="button" th:if="${hasNext}==true">下一页</button>
-	</div>
-</body>
-</html>
+	})
+</script>
