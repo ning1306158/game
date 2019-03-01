@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<style type="text/css">
+			.el-input__inner {
+				width: 200px;
+			}
+			
+			.el-textarea__inner {
+				width: 400px;
+				height: 100px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<template>
+				<el-form ref="form" :model="form" label-width="80px">
+					<el-form-item label="技能名">
+						<el-input v-model="form.skill_name"></el-input>
+					</el-form-item>
+					<el-form-item label="技能描述">
+						<el-input type="textarea" v-model="form.skill_desc"></el-input>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" @click="onSubmit()">立即创建</el-button>
+						<el-button>取消</el-button>
+					</el-form-item>
+				</el-form>
+			</template>
+		</div>
+	</body>
+	<script>
+		var data = {
+			form: {
+				hero_id: '',
+				skill_name: '',
+				skill_desc: ''
+			}
+		}
+		var methods = {
+			onSubmit() {
+				alert(this.form.skill_name);
+				this.$http.get('addSkill', this.form).then(result => {
+					console.log(result)
+				});
+			}
+		}
+		var app = new Vue({
+			el: '#app',
+			data: data,
+			created() {},
+			methods: methods,
+			mounted: function() {}
+		})
+		Vue.http.options.headers = {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+		};
+	</script>
+
+</html>

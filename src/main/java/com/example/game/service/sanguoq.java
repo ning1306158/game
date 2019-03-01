@@ -91,7 +91,8 @@ public class sanguoq {
 	}
 
 	@Test
-	public void TT() {
-		this.getWj();
+	public void TT() throws Exception {
+		Document document = Jsoup.connect(uri).get();
+		System.out.println(document);
 	}
 }

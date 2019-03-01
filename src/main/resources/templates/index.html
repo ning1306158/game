@@ -1,21 +1,57 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script type="text/javascript" src="/source/js/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="/source/js/jquery.form.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<link rel="stylesheet"
+	href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 </head>
+
 <body>
-	<h1 align="center">武将成就表</h1>
-	<div id='nerong' align="center">
+	<div id="app">
+		{{hello}}
+		<table>
+			<tr v-for="hero in tableData">
+				<td>{{hero.name}}</td>
+				<td>{{hero.nation}}</td>
+			</tr>
+		</table>
 	</div>
-	<script>
-	$(document).ready(function(){
-		var data1=($.ajax({url:'/achievement/findByWjnameLikeAj',async:false}));
-		console.log(data1);
-		$('#nerong').html(data1.responseText);
-			});
-	</script>
 </body>
+<script>
+		var data = {
+			hello: "你好",
+			tableData: []
+		}
+		var methods = {
+			findAll(t) {
+				axios({
+					method: 'get',
+					url: 'findAll',
+					async: false
+				}).then(function(resp) {
+					t.tableData = resp.data;
+				}).catch(err => {
+					console.log('请求失败:' + err.status + ',' + err.statusText);
+				});
+
+			}
+		}
+		var app = new Vue({
+			el: '#app',
+			data: data,
+			created() {
+				this.findAll(this)
+			},
+			methods: methods,
+			mounted: function() {
+				this.findAll();
+			}
+		})
+	</script>
+
 </html>

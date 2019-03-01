@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	</head>
+
+	<body>
+		<div id="app">
+			<table border="1">
+				<template v-for="hero in tableData">
+					<tr>
+						<td :rowspan="getRow(hero.listSkill.length)">{{hero.hero.name}}</td>
+						<td width="96"><a href="addSkill">添加技能</a></td>
+					</tr>
+					<tr v-for="skill in hero.listSkill">
+						<td>{{skill.skill_name}}</td>
+						<td>{{skill.skill_desc}}</td>
+					</tr>
+				</template>
+			</table>
+			<!--<el-table :data="tableData" :span-method="objectSpanMethod" border style="width: 100%;">
+				<el-table-column prop="hero.name" label="武将名" width="180">
+				</el-table-column>
+			</el-table>-->
+		</div>
+	</body>
+	<script>
+		var data = {
+			tableData: [],
+			PACK: ["标准包", "SR标准包", "天罡包", "地煞包", "人杰包", "特别包", "破军包", "魂烈包", "阴阳包", "贪狼包", "三英包",
+				"将星包", "未知"
+			],
+			NAT: ["蜀", "吴", "魏", "群", "神", "未知"]
+		}
+		var methods = {
+			findAll(t) {
+				axios({
+					method: 'get',
+					url: 'findSkill',
+					async: false
+				}).then(function(resp) {
+					t.tableData = resp.data;
+				}).catch(err => {
+					console.log('请求失败:' + err);
+				});
+
+			},
+			addSkill(formName) {
+
+			},
+			getRow(rowNum) {
+				if(rowNum <= 0) return 1
+				else
+					return rowNum + 1
+			},
+			getMinusSkill(li) {
+				debugger;
+				if(li.length <= 1) return [];
+				else return li.pop();
+			},
+			objectSpanMethod({
+				row,
+				column,
+				rowIndex,
+				columnIndex
+			}) {
+				if(columnIndex === 0) {
+					if(rowIndex % 2 === 0) {
+						return {
+							rowspan: 1,
+							colspan: 1
+						};
+					} else {
+						return {
+							rowspan: 1,
+							colspan: 1
+						};
+					}
+				}
+			}
+		}
+		var app = new Vue({
+			el: '#app',
+			data: data,
+			created() {
+				this.findAll(this)
+			},
+			methods: methods,
+			mounted: function() {}
+		})
+	</script>
+
+</html>
