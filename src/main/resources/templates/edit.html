@@ -6,28 +6,46 @@
 		<title>Insert title here</title>
 		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
 		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 	</head>
 
 	<body>
+
 		<div id="app">
+
 			<table border="1">
 				<template v-for="hero in tableData">
 					<tr>
 						<td :rowspan="getRow(hero.listSkill.length)">{{hero.hero.name}}</td>
-						<td width="96"><a href="addSkill">添加技能</a></td>
+						<td :rowspan="getRow(hero.listSkill.length)">{{hero.hero.identify}}</td>
+
+						<td width="96">
+							<button @click="showDialog(hero.hero.ids,null)">添加</button>
+						</td>
 					</tr>
 					<tr v-for="skill in hero.listSkill">
-						<td>{{skill.skill_name}}</td>
+						<td v-on:click="alert('asd')">{{skill.skill_name}}</td>
 						<td>{{skill.skill_desc}}</td>
 					</tr>
 				</template>
 			</table>
-			<!--<el-table :data="tableData" :span-method="objectSpanMethod" border style="width: 100%;">
-				<el-table-column prop="hero.name" label="武将名" width="180">
-				</el-table-column>
-			</el-table>-->
+			<el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+				<el-form :model="form">
+					<el-form-item label="名字" label-width="80px">
+						<el-input v-model="form.skill_name"></el-input>
+					</el-form-item>
+					<el-form-item label="描述" label-width="80px">
+						<el-input v-model="form.skill_desc"></el-input>
+					</el-form-item>
+				</el-form>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="dialogFormVisible = false">取 消</el-button>
+					<el-button type="primary" @click="addSkill">确 定
+					</el-button>
+				</div>
+			</el-dialog>
 		</div>
 	</body>
 	<script>
@@ -36,7 +54,14 @@
 			PACK: ["标准包", "SR标准包", "天罡包", "地煞包", "人杰包", "特别包", "破军包", "魂烈包", "阴阳包", "贪狼包", "三英包",
 				"将星包", "未知"
 			],
-			NAT: ["蜀", "吴", "魏", "群", "神", "未知"]
+			NAT: ["蜀", "吴", "魏", "群", "神", "未知"],
+			dialogFormVisible: false,
+			form: {
+				skill_desc: '',
+				skill_name: '',
+				hero_id: '',
+				skill_id:''
+			}
 		}
 		var methods = {
 			findAll(t) {
@@ -51,8 +76,19 @@
 				});
 
 			},
-			addSkill(formName) {
-
+			showDialog(hero_id,skill_id) {
+				this.dialogFormVisible = true
+				this.form.hero_id = hero_id
+				this.form.skill_id=skill_id
+			},
+			addSkill() {
+				axios({
+					method: 'post',
+					url: 'addSkill',
+					data: this.form
+				})
+				console.log(data.form)
+				this.dialogFormVisible = false
 			},
 			getRow(rowNum) {
 				if(rowNum <= 0) return 1

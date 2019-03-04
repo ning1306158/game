@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	</head>
+	<body>
+		<div id="app">
+			<el-table :data="tableData" class="tb-edit" highlight-current-row @row-click="handleCurrentChange">
+				<el-table-column label="武将名" width="180"> <template scope="scope">
+						<span>{{scope.row.hero.name}}</span> </template> </el-table-column>
+				<el-table-column prop="address" label="技能名" width="180"> <template scope="scope">
+						<span>{{scope.row.skill.skill_name}}</span> </template> </el-table-column>
+				<el-table-column prop="address" label="技能描述"> <template scope="scope"> <span>{{scope.row.skill.skill_desc}}</span>
+					</template> </el-table-column>
+				<el-table-column label="操作"> <template scope="scope">
+						<el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					</template> </el-table-column>
+			</el-table>
+			<div class="block">
+				<el-pagination background :current-page="currentPage" layout="prev, pager, next" :total="totelEle" @current-change="skipPage">
+				</el-pagination>
+			</div>
+		</div>
+	</body>
+	<script>
+		var data = {
+			tableData: [],
+			page_num: 1,
+			currentPage: 1,
+			totelPageNum: 100,
+			totelEle: 100
+		}
+		var methods = {
+			async getSkill() {
+				try {
+					const response = await axios.get('Hero/findAllSkill');
+					this.tableData = response.data.content
+					this.totelPageNum = response.data.totalPages
+					this.totelEle = response.data.totalElements
+					this.currentPage = response.data.number + 1
+					console.log(response);
+				} catch (error) {
+					console.error(error);
+				}
+			},
+			async nextPage(mi) {
+				try {
+					const response = await axios.get('Hero/findAllSkill?page_num=' + (this.currentPage + mi));
+					this.tableData = response.data.content
+					this.currentPage = response.data.number + 1
+					console.log(response);
+				} catch (error) {
+					console.error(error);
+				}
+			},
+			async skipPage(n) {
+				try {
+					const response = await axios.get('Hero/findAllSkill?page_num=' + n);
+					this.tableData = response.data.content
+					this.currentPage = response.data.number + 1
+					console.log(response);
+				} catch (error) {
+					console.error(error);
+				}
+			},
+			handleCurrentChange(row, event, column) {
+				console.log(row, event, column, event.currentTarget)
+			},
+			handleEdit(index, row) {
+				console.log(index, row);
+			},
+			handleDelete(index, row) {
+				console.log(index, row);
+			}
+		}
+		var app = new Vue({
+			el: '#app',
+			data: data,
+			created: function() {
+				this.getSkill()
+			},
+			methods: methods,
+			mounted: function() {}
+		})
+	</script>
+
+</html>

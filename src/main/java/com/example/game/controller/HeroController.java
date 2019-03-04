@@ -1,18 +1,25 @@
 package com.example.game.controller;
 
+import java.util.Enumeration;
 import java.util.List;
 
-import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.data.domain.Page;
+import org.springframework.http.codec.multipart.SynchronossPartHttpMessageReader;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.game.domain.Hero;
 import com.example.game.domain.HeroInfo;
 import com.example.game.domain.Skill;
+import com.example.game.domain.SkillInfo;
 import com.example.game.service.HeroService;
 import com.example.game.service.SkillService;
 
@@ -24,42 +31,64 @@ public class HeroController {
 	@Autowired
 	SkillService skillService;
 
-	@RequestMapping()
-	public ModelAndView index() {
-		ModelAndView mv = new ModelAndView("index");
-		return mv;
-	}
 	@RequestMapping("/editHtml")
 	public ModelAndView editHtml() {
 		ModelAndView mv = new ModelAndView("edit");
 		return mv;
 	}
-	@RequestMapping("/addHtml")
-	public ModelAndView addHtml(String hero_id) {
+
+	@RequestMapping(value = "/addHtml/{hero_id}")
+	public ModelAndView addHtml(@PathVariable("hero_id") String hero_id) {
+		if (hero_id == null || "".equals(hero_id)) {
+			ModelAndView mv = new ModelAndView("edit");
+			return mv;
+		}
+		Hero hero = heroService.findById(hero_id);
 		ModelAndView mv = new ModelAndView("addSkill");
-		mv.addObject("hero_id", hero_id);
+		mv.addObject("hero", hero);
 		return mv;
 	}
+
 	@RequestMapping("/findAll")
 	public List<Hero> findAll() {
-		return heroService.findAll(); 
-	}
-	@RequestMapping("/get")
-	public int  getAll() {
-		 heroService.saveAllHero();
-		 return 0;
-	}
-	@RequestMapping("/findSkill")
-	public List<HeroInfo> findSkill() {
-		return heroService.findAllSkill(); 
-	}
-	@RequestMapping("/addSkill")
-	public void addSkill(String hero_id,String form,String skill_name,String skill_desc) {
-		System.out.println(hero_id);
-		System.out.println(form);
-		System.out.println(skill_name);
-		System.out.println(skill_desc);
-//		skillService.save(new Skill(hero_id,skill_name,skill_desc));
+		return heroService.findAll();
 	}
 
+	@RequestMapping("/get")
+	public int getAll() {
+		heroService.saveAllHero();
+		return 0;
+	}
+
+	@RequestMapping(value = "/addSkill")
+	public void addSkill(@RequestBody String skillJson) {
+		skillService.save(skillJson);
+	}
+
+	@RequestMapping("/updateSkill")
+	public void updateSkill(@RequestBody String skillJson) {
+
+	}
+
+	@RequestMapping("/findAllSkill")
+	public Page<SkillInfo> findAllSkill(Integer page_num, Integer page_size) {
+		if (page_num == null || page_num <= 0)
+			page_num = new Integer(1);
+		if (page_size == null || page_size <= 0)
+			page_size = new Integer(10);
+		return skillService.findAllSkill(page_num, page_size, "%%");
+	}
+
+	@RequestMapping("/findSkill")
+	public Page<SkillInfo> findSkill(Integer page_num, Integer page_size, String key) {
+		if (page_num == null || page_num <= 0)
+			page_num = new Integer(1);
+		if (page_size == null || page_size <= 0)
+			page_size = new Integer(10);
+		if (key == null)
+			key = "%%";
+		else
+			key = "%" + key + "%";
+		return skillService.findAllSkill(page_num, page_size, key);
+	}
 }

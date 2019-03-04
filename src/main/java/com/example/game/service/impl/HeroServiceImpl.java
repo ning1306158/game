@@ -44,6 +44,7 @@ public class HeroServiceImpl implements HeroService{
 		Elements a = document.select("div.wj");
 		for (Element element : a) {
 			handleSkill(element.attr("data-id"));
+//			break;
 		}
 
 		return 0;
@@ -51,7 +52,7 @@ public class HeroServiceImpl implements HeroService{
 
 	private void handleSkill(String attr) {
 		String skillUri = uri + "general/" + attr;
-//		String skillUri = uri + "general/hl_shendiaochan";
+//		String skillUri = uri + "general/tl_skzhugejin";
 		CloseableHttpClient httpClient = null;
 		CloseableHttpResponse httpResponse = null;
 		try {
@@ -70,8 +71,10 @@ public class HeroServiceImpl implements HeroService{
 			heroRepository.save(hero);
 			String hero_id=hero.getIds();
 			String[] skills=jObject.getString("skill").trim().split("<br/>|<br>");
+			System.out.println(skills);
 			System.out.println(skills.length);
 			for (String skill: skills) {
+				System.out.println(skill);
 				skill=skill.trim();
 				Skill s=new Skill();
 				s.setHero_id(hero_id);
@@ -125,5 +128,10 @@ public class HeroServiceImpl implements HeroService{
 			heroInfos.add(heroInfo);
 		}
 		return heroInfos;
+	}
+
+	@Override
+	public Hero findById(String hero_id) {
+		return heroRepository.getOne(hero_id);
 	}
 }

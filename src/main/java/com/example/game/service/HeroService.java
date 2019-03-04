@@ -10,4 +10,5 @@ public interface HeroService {
 	public int saveAllHero();
 	public List<Hero> findAll();
 	public List<HeroInfo> findAllSkill();
+	public Hero findById(String hero_id);
 }

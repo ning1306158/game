@@ -31,7 +31,7 @@
 			findAll(t) {
 				axios({
 					method: 'get',
-					url: 'findAll',
+					url: 'Hero/findAll',
 					async: false
 				}).then(function(resp) {
 					t.tableData = resp.data;
@@ -49,7 +49,6 @@
 			},
 			methods: methods,
 			mounted: function() {
-				this.findAll();
 			}
 		})
 	</script>
