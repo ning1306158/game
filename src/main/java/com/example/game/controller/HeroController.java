@@ -71,24 +71,12 @@ public class HeroController {
 	}
 
 	@RequestMapping("/findAllSkill")
-	public Page<SkillInfo> findAllSkill(Integer page_num, Integer page_size) {
-		if (page_num == null || page_num <= 0)
-			page_num = new Integer(1);
-		if (page_size == null || page_size <= 0)
-			page_size = new Integer(10);
-		return skillService.findAllSkill(page_num, page_size, "%%");
+	public Page<SkillInfo> findAllSkill(@RequestBody String json) {
+		return skillService.findAllSkill(json);
 	}
 
 	@RequestMapping("/findSkill")
-	public Page<SkillInfo> findSkill(Integer page_num, Integer page_size, String key) {
-		if (page_num == null || page_num <= 0)
-			page_num = new Integer(1);
-		if (page_size == null || page_size <= 0)
-			page_size = new Integer(10);
-		if (key == null)
-			key = "%%";
-		else
-			key = "%" + key + "%";
-		return skillService.findAllSkill(page_num, page_size, key);
+	public Page<SkillInfo> findSkill(@RequestBody String json) {
+		return skillService.findAllSkill(json);
 	}
-}
+}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.game.domain.Skill;
 import com.example.game.domain.SkillInfo;
 import com.example.game.domain.SkillRepository;
@@ -41,7 +42,11 @@ public class SkillServiceImpl implements SkillService{
 	 * @return 
 	 */
 	@Override
-	public Page<SkillInfo> findAllSkill(int page_num,int page_size,String key) {
+	public Page<SkillInfo> findAllSkill(String json) {
+		JSONObject jsonObject=JSONObject.parseObject(json);
+		int page_num=jsonObject.getIntValue("page_num");
+		int page_size=jsonObject.getIntValue("page_size");
+		String key="%"+jsonObject.getString("key").trim()+"%";
 		List<Order> orders=new ArrayList<>();
 		orders.add(new Order(Direction.DESC,"ids"));
 		Sort sort=Sort.by(orders);

@@ -11,6 +11,16 @@
 	</head>
 	<body>
 		<div id="app">
+			<el-form :inline="true" :model="formInline" class="demo-form-inline" @submit.native.prevent>
+				<el-form-item label="搜索">
+					<el-input v-model="formInline.key" placeholder="请输入关键字" @keyup.enter.native="onSubmit" @current-change="onSubmit"></el-input>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="onSubmit">查询</el-button>
+				</el-form-item>
+			</el-form>
+
+
 			<el-table :data="tableData" class="tb-edit" highlight-current-row @row-click="handleCurrentChange">
 				<el-table-column label="武将名" width="180"> <template scope="scope">
 						<span>{{scope.row.hero.name}}</span> </template> </el-table-column>
@@ -31,7 +41,11 @@
 	<script>
 		var data = {
 			tableData: [],
-			page_num: 1,
+			formInline: {
+				page_num: 1,
+				page_size: 10,
+				key: ''
+			},
 			currentPage: 1,
 			totelPageNum: 100,
 			totelEle: 100
@@ -39,7 +53,7 @@
 		var methods = {
 			async getSkill() {
 				try {
-					const response = await axios.get('Hero/findAllSkill');
+					const response = await axios.post('Hero/findAllSkill', this.formInline);
 					this.tableData = response.data.content
 					this.totelPageNum = response.data.totalPages
 					this.totelEle = response.data.totalElements
@@ -51,8 +65,10 @@
 			},
 			async nextPage(mi) {
 				try {
-					const response = await axios.get('Hero/findAllSkill?page_num=' + (this.currentPage + mi));
+					const response = await axios.post('Hero/findSkill', data.formInline);
 					this.tableData = response.data.content
+					this.totelPageNum = response.data.totalPages
+					this.totelEle = response.data.totalElements
 					this.currentPage = response.data.number + 1
 					console.log(response);
 				} catch (error) {
@@ -61,8 +77,23 @@
 			},
 			async skipPage(n) {
 				try {
-					const response = await axios.get('Hero/findAllSkill?page_num=' + n);
+					data.formInline.page_num = n
+					const response = await axios.post('Hero/findSkill', data.formInline);
 					this.tableData = response.data.content
+					this.totelPageNum = response.data.totalPages
+					this.totelEle = response.data.totalElements
+					this.currentPage = response.data.number + 1
+					console.log(response);
+				} catch (error) {
+					console.error(error);
+				}
+			},
+			async onSubmit(n) {
+				try {
+					const response = await axios.post('Hero/findSkill', data.formInline);
+					this.tableData = response.data.content
+					this.totelPageNum = response.data.totalPages
+					this.totelEle = response.data.totalElements
 					this.currentPage = response.data.number + 1
 					console.log(response);
 				} catch (error) {

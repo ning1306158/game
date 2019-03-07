@@ -10,5 +10,5 @@ import com.example.game.domain.SkillInfo;
 public interface SkillService {
 	public void save(Skill skill);
 	public void save(String skillJson);
-	public Page<SkillInfo> findAllSkill(int page_num,int page_size,String key);
+	public Page<SkillInfo> findAllSkill(String json);
 }
