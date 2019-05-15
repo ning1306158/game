@@ -79,4 +79,8 @@ public class HeroController {
 	public Page<SkillInfo> findSkill(@RequestBody String json) {
 		return skillService.findAllSkill(json);
 	}
+	@RequestMapping("/findSkillColor")
+	public Page<SkillInfo> findSkillColor(@RequestBody String json) {
+		return skillService.findSkillColor(json);
+	}
 }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     

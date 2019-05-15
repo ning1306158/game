@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/Hero")
+@RequestMapping("/")
 public class HeroSkipCotroller {
 	@RequestMapping()
 	public String index() {

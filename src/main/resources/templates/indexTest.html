@@ -53,7 +53,7 @@
 		var methods = {
 			async getSkill() {
 				try {
-					const response = await axios.post('Hero/findAllSkill', this.formInline);
+					const response = await axios.post('api/Hero/findAllSkill', this.formInline);
 					this.tableData = response.data.content
 					this.totelPageNum = response.data.totalPages
 					this.totelEle = response.data.totalElements
@@ -90,7 +90,8 @@
 			},
 			async onSubmit(n) {
 				try {
-					const response = await axios.post('Hero/findSkill', data.formInline);
+					this.formInline.page_num = 1
+					const response = await axios.post('/api/Hero/findSkill', data.formInline);
 					this.tableData = response.data.content
 					this.totelPageNum = response.data.totalPages
 					this.totelEle = response.data.totalElements

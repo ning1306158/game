@@ -11,4 +11,5 @@ public interface SkillService {
 	public void save(Skill skill);
 	public void save(String skillJson);
 	public Page<SkillInfo> findAllSkill(String json);
+	public Page<SkillInfo> findSkillColor(String json);
 }

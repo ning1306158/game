@@ -11,7 +11,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -90,9 +89,4 @@ public class sanguoq {
 
 	}
 
-	@Test
-	public void TT() throws Exception {
-		Document document = Jsoup.connect(uri).get();
-		System.out.println(document);
-	}
 }
